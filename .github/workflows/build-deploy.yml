@@ -6,11 +6,11 @@
         - "CapstoneProject"
         - "master"
 
-    jobs:
-      build:
-        runs-on: ubuntu-server-latest
-        steps:
-          - name: Push repo
-            uses: actions/checkoutV3
-          - name: Print hello
-            run: echo "Hello world"
+  jobs:
+    build:
+      runs-on: ubuntu-server-latest
+      steps:
+        - name: Push repo
+          uses: actions/checkout@V3
+        - name: Print hello
+          run: echo "Hello world"

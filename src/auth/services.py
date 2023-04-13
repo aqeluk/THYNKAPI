@@ -2,9 +2,9 @@ from typing import Dict
 from jose import jwt
 from datetime import datetime, timedelta
 from fastapi.security import OAuth2PasswordBearer
-from .schemas import TokenData
-from config import settings
-from .exceptions import TokenExpiredException, InvalidTokenException, AccessTokenCreationException
+from src.auth.schemas import TokenData
+from src.config import settings
+from src.auth.exceptions import TokenExpiredException, InvalidTokenException, AccessTokenCreationException
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')

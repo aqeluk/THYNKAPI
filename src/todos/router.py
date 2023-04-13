@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
 from datetime import datetime
 from typing import List
-from .schemas import Todo, TodoResponse
-from database import db
-from user.services import get_current_user
-from exceptions import ServerErrorException, UnauthorizedUserException
-from .exceptions import TodoNotFoundException
+from src.todos.schemas import Todo, TodoResponse
+from src.database import db
+from src.user.services import get_current_user
+from src.exceptions import ServerErrorException, UnauthorizedUserException
+from src.todos.exceptions import TodoNotFoundException
 
 
 router = APIRouter(

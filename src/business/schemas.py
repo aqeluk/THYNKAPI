@@ -1,7 +1,7 @@
 from tortoise import fields
 from tortoise.validators import MinLengthValidator
 from tortoise.contrib.pydantic import pydantic_model_creator
-from models import Business, Product
+from src.models import Business, Product
 
 
 class UserBusiness(Business):

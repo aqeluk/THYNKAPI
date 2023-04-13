@@ -1,6 +1,6 @@
 from fastapi import Depends, HTTPException
-from database import db
-from auth.services import verify_access_token, oauth2_scheme
+from src.database import db
+from src.auth.services import verify_access_token, oauth2_scheme
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):

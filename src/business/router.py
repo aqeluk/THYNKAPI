@@ -5,14 +5,14 @@ from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
 import secrets
 from PIL import Image
 from tortoise.exceptions import DoesNotExist
-from .schemas import user_business_pydantic, user_business_pydanticIn, user_product_pydantic,\
+from src.business.schemas import user_business_pydantic, user_business_pydanticIn, user_product_pydantic,\
     user_product_pydanticIn, UserProduct, UserBusiness
-from database import db
+from src.database import db
 from datetime import datetime
-from user.services import get_current_user
-from exceptions import ServerErrorException, UserNotFoundException, ProductNotFoundException, UnauthorizedUserException,\
+from src.user.services import get_current_user
+from src.exceptions import ServerErrorException, UserNotFoundException, ProductNotFoundException, UnauthorizedUserException,\
     InvalidIdException
-from .exceptions import BusinessNotFoundException
+from src.business.exceptions import BusinessNotFoundException
 
 
 router = APIRouter(

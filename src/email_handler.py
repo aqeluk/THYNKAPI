@@ -1,5 +1,5 @@
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
-from config import settings
+from src.config import settings
 
 
 conf = ConnectionConfig(
@@ -11,8 +11,7 @@ conf = ConnectionConfig(
     MAIL_FROM_NAME=settings.MAIL_FROM_NAME,
     MAIL_STARTTLS=True,
     MAIL_SSL_TLS=False,
-    USE_CREDENTIALS=True,
-    TEMPLATE_FOLDER="../templates"
+    TEMPLATE_FOLDER="templates"
 )
 
 

@@ -4,14 +4,14 @@ import shutil
 from PIL import Image
 from fastapi import APIRouter, UploadFile, File, Depends
 from tortoise.exceptions import DoesNotExist
-from .schemas import wholesale_business_pydantic, wholesale_business_pydanticIn, wholesale_product_pydantic,\
+from src.wholesale.schemas import wholesale_business_pydantic, wholesale_business_pydanticIn, wholesale_product_pydantic,\
     wholesale_product_pydanticIn, wholesale_scraped_product_pydantic, wholesale_scraped_product_pydanticIn,\
     WholesaleProduct, WholesaleBusiness, WholesaleScrapedProduct
 from datetime import datetime
 from fastapi import HTTPException
-from user.services import get_current_user
-from exceptions import ServerErrorException, UnauthorizedUserException, ProductNotFoundException, InvalidIdException
-from .exceptions import WholesaleNotFoundException
+from src.user.services import get_current_user
+from src.exceptions import ServerErrorException, UnauthorizedUserException, ProductNotFoundException, InvalidIdException
+from src.wholesale.exceptions import WholesaleNotFoundException
 
 
 router = APIRouter(

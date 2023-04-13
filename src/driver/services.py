@@ -8,7 +8,7 @@ from fastapi import HTTPException
 from selenium.common import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
-from .config import sa_settings
+from src.driver.config import sa_settings
 
 DRIVER_PATH = "geckodriver"
 BROWSER_OPTIONS = Options()

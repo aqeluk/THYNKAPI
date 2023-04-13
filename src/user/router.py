@@ -2,18 +2,18 @@ import shutil
 
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
 from fastapi.encoders import jsonable_encoder
-from auth.services import create_access_token
-from .services import get_current_user
-from database import db
-from .schemas import User, UserResponse, UserCreate, PasswordReset, PasswordResetRequest
-from .utils import get_password_hash
-from email_handler import send_registration_mail, send_verification_mail, password_reset
+from src.auth.services import create_access_token
+from src.user.services import get_current_user
+from src.database import db
+from src.user.schemas import User, UserResponse, UserCreate, PasswordReset, PasswordResetRequest
+from src.user.utils import get_password_hash
+from src.email_handler import send_registration_mail, send_verification_mail, password_reset
 import secrets
 from PIL import Image
 from datetime import datetime
 import os
-from exceptions import ServerErrorException, UserNotFoundException, UnauthorizedUserException, InvalidIdException
-from .exceptions import DetailNotAllowedException, VerificationKeyNotFoundException, UserVerifiedException,\
+from src.exceptions import ServerErrorException, UserNotFoundException, UnauthorizedUserException, InvalidIdException
+from src.user.exceptions import DetailNotAllowedException, VerificationKeyNotFoundException, UserVerifiedException,\
     UserUpdateException
 
 

@@ -1,20 +1,28 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from csvhandler import router as csvhandler
+from src.csvhandler import router as csvhandler
 from starlette.responses import RedirectResponse
-from driver import router as driver
-from auth import router as auth
-from business import router as business
-from todos import router as todos
-from user import router as user
-from wholesale import router as wholesale
+from src.driver import router as driver
+from src.auth import router as auth
+from src.business import router as business
+from src.todos import router as todos
+from src.user import router as user
+from src.wholesale import router as wholesale
 from fastapi.staticfiles import StaticFiles
 from tortoise.contrib.fastapi import register_tortoise
-from config import settings
+from src.config import settings
+import os
+import certifi
+
+os.environ['SSL_CERT_FILE'] = certifi.where()
+
 
 
 app = FastAPI(title="THYNK API")
-origins = ["*"]
+origins = [
+    "http://localhost:3000", 
+"http://192.168.1.98:3000", 
+]
 
 
 app.add_middleware(
@@ -26,7 +34,8 @@ app.add_middleware(
 )
 
 
-app.mount("/static", StaticFiles(directory="../static"), name="static")
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/")
@@ -46,7 +55,7 @@ app.include_router(wholesale.router)
 register_tortoise(
     app,
     db_url=settings.postgresql_url,
-    modules={'models': ['models', 'business.schemas', 'wholesale.schemas']},
+    modules={'models': ['src.models', 'src.business.schemas', 'src.wholesale.schemas']},
     generate_schemas=True,
     add_exception_handlers=True
 )

@@ -1,0 +1,220 @@
+1680890914390	geckodriver	INFO	Listening on 127.0.0.1:49642
+1680890914859	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/App ... s" "localhost" "-foreground" "-no-remote" "-profile" "/var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofilef9Qp3a"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1680890915306	Marionette	INFO	Marionette enabled
+1680890915431	Marionette	INFO	Listening on port 49651
+Read port: 49651
+console.error: "Warning: unrecognized command line flag -remote-allow-hosts\n"
+WebDriver BiDi listening on ws://127.0.0.1:49643
+1680890915720	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofilef9Qp3a/search.json.mozlz4", (void 0)))
+DevTools listening on ws://127.0.0.1:49643/devtools/browser/69687700-5101-4b37-81af-7c86c5b9e9b1
+1680890945089	geckodriver	INFO	Listening on 127.0.0.1:49683
+1680890945599	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/App ... s" "localhost" "-foreground" "-no-remote" "-profile" "/var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileO9l5an"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1680890946039	Marionette	INFO	Marionette enabled
+1680890946195	Marionette	INFO	Listening on port 49694
+Read port: 49694
+console.error: "Warning: unrecognized command line flag -remote-allow-hosts\n"
+WebDriver BiDi listening on ws://127.0.0.1:49684
+1680890946489	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileO9l5an/search.json.mozlz4", (void 0)))
+DevTools listening on ws://127.0.0.1:49684/devtools/browser/dcd52f1d-1324-47e7-9196-c073b70364c4
+1680891128609	geckodriver	INFO	Listening on 127.0.0.1:49781
+1680891129065	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/App ... s" "localhost" "-foreground" "-no-remote" "-profile" "/var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileGf6fKx"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1680891129509	Marionette	INFO	Marionette enabled
+1680891129579	Marionette	INFO	Listening on port 49789
+Read port: 49789
+console.error: "Warning: unrecognized command line flag -remote-allow-hosts\n"
+WebDriver BiDi listening on ws://127.0.0.1:49782
+1680891130119	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileGf6fKx/search.json.mozlz4", (void 0)))
+DevTools listening on ws://127.0.0.1:49782/devtools/browser/c32de83c-7ec5-418f-9b7d-26b54584f135
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1680891313765	geckodriver	INFO	Listening on 127.0.0.1:49931
+1680891314280	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/App ... s" "localhost" "-foreground" "-no-remote" "-profile" "/var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofilePDu86m"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1680891314669	Marionette	INFO	Marionette enabled
+1680891314817	Marionette	INFO	Listening on port 49939
+console.error: "Warning: unrecognized command line flag -remote-allow-hosts\n"
+Read port: 49939
+WebDriver BiDi listening on ws://127.0.0.1:49932
+1680891315179	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofilePDu86m/search.json.mozlz4", (void 0)))
+DevTools listening on ws://127.0.0.1:49932/devtools/browser/08a7708b-786f-4bba-8810-dfe9c225e92a
+1680893843716	Marionette	INFO	Stopped listening on port 49939
+1680893912517	geckodriver	INFO	Listening on 127.0.0.1:50573
+1680893913032	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/App ... s" "localhost" "-foreground" "-no-remote" "-profile" "/var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofile6p6Zaa"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1680893913392	Marionette	INFO	Marionette enabled
+1680893913450	Marionette	INFO	Listening on port 50581
+console.error: "Warning: unrecognized command line flag -remote-allow-hosts\n"
+Read port: 50581
+WebDriver BiDi listening on ws://127.0.0.1:50574
+1680893914059	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofile6p6Zaa/search.json.mozlz4", (void 0)))
+DevTools listening on ws://127.0.0.1:50574/devtools/browser/6818d905-a085-41df-a5bd-f590c2cd44fc
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1680894068016	geckodriver	INFO	Listening on 127.0.0.1:50644
+1680894068525	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/App ... s" "localhost" "-foreground" "-no-remote" "-profile" "/var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileJQcNsI"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1680894068940	Marionette	INFO	Marionette enabled
+1680894069092	Marionette	INFO	Listening on port 50652
+console.error: "Warning: unrecognized command line flag -remote-allow-hosts\n"
+Read port: 50652
+WebDriver BiDi listening on ws://127.0.0.1:50645
+1680894069424	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileJQcNsI/search.json.mozlz4", (void 0)))
+DevTools listening on ws://127.0.0.1:50645/devtools/browser/7df9d120-bb57-4ece-b320-9a8426e00d11
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1680894543042	geckodriver	INFO	Listening on 127.0.0.1:50768
+1680894543554	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/App ... s" "localhost" "-foreground" "-no-remote" "-profile" "/var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileFbqH8p"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1680894543915	Marionette	INFO	Marionette enabled
+1680894543974	Marionette	INFO	Listening on port 50776
+console.error: "Warning: unrecognized command line flag -remote-allow-hosts\n"
+Read port: 50776
+WebDriver BiDi listening on ws://127.0.0.1:50769
+1680894544624	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileFbqH8p/search.json.mozlz4", (void 0)))
+DevTools listening on ws://127.0.0.1:50769/devtools/browser/b891eed2-89ff-496c-b8aa-13bf40bedd28
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1680894709662	geckodriver	INFO	Listening on 127.0.0.1:50888
+1680894710178	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/App ... s" "localhost" "-foreground" "-no-remote" "-profile" "/var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileusb6gO"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1680894710683	Marionette	INFO	Marionette enabled
+1680894710768	Marionette	INFO	Listening on port 50896
+Read port: 50896
+console.error: "Warning: unrecognized command line flag -remote-allow-hosts\n"
+WebDriver BiDi listening on ws://127.0.0.1:50889
+1680894711441	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileusb6gO/search.json.mozlz4", (void 0)))
+DevTools listening on ws://127.0.0.1:50889/devtools/browser/7a9bf3c8-5c4b-43ab-9b4d-c59722ef5c9e
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1680894933432	geckodriver	INFO	Listening on 127.0.0.1:50992
+1680894933943	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/App ... s" "localhost" "-foreground" "-no-remote" "-profile" "/var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileqbV1PA"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1680894934267	Marionette	INFO	Marionette enabled
+1680894934382	Marionette	INFO	Listening on port 51000
+console.error: "Warning: unrecognized command line flag -remote-allow-hosts\n"
+Read port: 51000
+WebDriver BiDi listening on ws://127.0.0.1:50993
+1680894934699	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileqbV1PA/search.json.mozlz4", (void 0)))
+DevTools listening on ws://127.0.0.1:50993/devtools/browser/8d8319f5-f888-4b69-82c9-f4ef412d3eda
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1680895027970	geckodriver	INFO	Listening on 127.0.0.1:51058
+1680895028482	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/App ... s" "localhost" "-foreground" "-no-remote" "-profile" "/var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileLJqNxb"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1680895028851	Marionette	INFO	Marionette enabled
+1680895028983	Marionette	INFO	Listening on port 51066
+Read port: 51066
+console.error: "Warning: unrecognized command line flag -remote-allow-hosts\n"
+WebDriver BiDi listening on ws://127.0.0.1:51059
+1680895029285	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileLJqNxb/search.json.mozlz4", (void 0)))
+DevTools listening on ws://127.0.0.1:51059/devtools/browser/e867e3e1-f0f0-48d3-9fb6-aea6680cac18
+1680898594380	geckodriver	INFO	Listening on 127.0.0.1:49488
+1680898594855	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/App ... s" "localhost" "-foreground" "-no-remote" "-profile" "/var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileQTqAOf"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1680898595284	Marionette	INFO	Marionette enabled
+1680898595427	Marionette	INFO	Listening on port 49496
+Read port: 49496
+console.error: "Warning: unrecognized command line flag -remote-allow-hosts\n"
+WebDriver BiDi listening on ws://127.0.0.1:49489
+1680898595795	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileQTqAOf/search.json.mozlz4", (void 0)))
+DevTools listening on ws://127.0.0.1:49489/devtools/browser/3189c3ad-6ce5-4c69-93f5-ae582b3cad99
+1681422948023	geckodriver	INFO	Listening on 127.0.0.1:49992
+1681422948500	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/App ... s" "localhost" "-foreground" "-no-remote" "-profile" "/var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileflg9CW"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1681422948922	Marionette	INFO	Marionette enabled
+1681422949260	Marionette	INFO	Listening on port 50001
+console.error: "Warning: unrecognized command line flag -remote-allow-hosts\n"
+Read port: 50001
+WebDriver BiDi listening on ws://127.0.0.1:49993
+1681422949382	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileflg9CW/search.json.mozlz4", (void 0)))
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:49993/devtools/browser/58992998-b6b3-464f-84b4-efa1f1cf753a
+1681423282084	geckodriver	INFO	Listening on 127.0.0.1:49281
+1681423282556	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/App ... s" "localhost" "-foreground" "-no-remote" "-profile" "/var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofile8gsqgh"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1681423283062	Marionette	INFO	Marionette enabled
+1681423283453	Marionette	INFO	Listening on port 49306
+Read port: 49306
+console.error: "Warning: unrecognized command line flag -remote-allow-hosts\n"
+WebDriver BiDi listening on ws://127.0.0.1:49282
+1681423283550	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofile8gsqgh/search.json.mozlz4", (void 0)))
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:49282/devtools/browser/7ced91f2-cc52-4ac9-9245-0c024a7d6d86
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.

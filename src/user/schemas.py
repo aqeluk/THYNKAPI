@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from models import PyObjectId
+from src.models import PyObjectId
 from bson import ObjectId
 from pydantic import BaseModel, Field, EmailStr, validator, constr
 

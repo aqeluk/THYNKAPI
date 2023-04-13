@@ -1,8 +1,8 @@
 import csv
 import io
 from fastapi import UploadFile, File, APIRouter
-from .exceptions import CsvFileException
-from exceptions import ServerErrorException
+from src.csvhandler.exceptions import CsvFileException
+from src.exceptions import ServerErrorException
 
 
 router = APIRouter(

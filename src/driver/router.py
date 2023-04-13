@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
-from exceptions import ServerErrorException
+from src.exceptions import ServerErrorException
 
-from .services import launch_browser, close_browser, go_to_url, login_to_selleramp, search_ean_on_selleramp,\
+from src.driver.services import launch_browser, close_browser, go_to_url, login_to_selleramp, search_ean_on_selleramp,\
     scrape_product_data
 
 router = APIRouter(

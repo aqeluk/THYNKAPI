@@ -218,3 +218,43 @@ Exiting due to channel error.
 Exiting due to channel error.
 Exiting due to channel error.
 Exiting due to channel error.
+1681469978620	geckodriver	INFO	Listening on 127.0.0.1:49524
+1681469979109	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/App ... s" "localhost" "-foreground" "-no-remote" "-profile" "/var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileNFvqtB"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1681469979477	Marionette	INFO	Marionette enabled
+1681469979825	Marionette	INFO	Listening on port 49534
+Read port: 49534
+console.error: "Warning: unrecognized command line flag -remote-allow-hosts\n"
+WebDriver BiDi listening on ws://127.0.0.1:49525
+1681469979934	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileNFvqtB/search.json.mozlz4", (void 0)))
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:49525/devtools/browser/536b69a3-aa2b-47a2-8b1d-e3155fe3e851
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1681470045932	geckodriver	INFO	Listening on 127.0.0.1:49610
+1681470046442	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/App ... s" "localhost" "-foreground" "-no-remote" "-profile" "/var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileWQKMPP"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1681470046753	Marionette	INFO	Marionette enabled
+1681470047128	Marionette	INFO	Listening on port 49618
+console.error: "Warning: unrecognized command line flag -remote-allow-hosts\n"
+Read port: 49618
+WebDriver BiDi listening on ws://127.0.0.1:49611
+1681470047203	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /var/folders/cw/xjzyfy5n66j891gn5v5jrth80000gn/T/rust_mozprofileWQKMPP/search.json.mozlz4", (void 0)))
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:49611/devtools/browser/847a0a07-ce17-48b2-8133-ac211e42b93f
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.

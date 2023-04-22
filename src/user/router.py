@@ -2,16 +2,19 @@ import shutil
 
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
 from fastapi.encoders import jsonable_encoder
+from tortoise.exceptions import DoesNotExist
 from src.auth.services import create_access_token
 from src.user.services import get_current_user
 from src.database import db
-from src.user.schemas import User, UserResponse, UserCreate, PasswordReset, PasswordResetRequest
+from src.todos.schemas import Todo
+from src.user.schemas import User, PasswordReset, PasswordResetRequest, UserResponse, UserCreate, UserUpdate_Pydantic, User_Pydantic
 from src.user.utils import get_password_hash
 from src.email_handler import send_registration_mail, send_verification_mail, password_reset
 import secrets
 from PIL import Image
 from datetime import datetime
 import os
+import shutil
 from src.exceptions import ServerErrorException, UserNotFoundException, UnauthorizedUserException, InvalidIdException
 from src.user.exceptions import DetailNotAllowedException, VerificationKeyNotFoundException, UserVerifiedException,\
     UserUpdateException
@@ -22,25 +25,23 @@ router = APIRouter(
     tags=["Users"]
 )
 
-
 @router.post("/registration", response_description="User Sign Up", response_model=UserResponse,
              status_code=status.HTTP_201_CREATED)
 async def registration(user_info: UserCreate):
     try:
         user_info = jsonable_encoder(user_info)
-        username = await db["users"].find_one({"username": user_info["username"]})
-        email = await db["users"].find_one({"email": user_info["email"]})
-        if username:
+        username_exists = await User.exists(username=user_info["username"])
+        email_exists = await User.exists(email=user_info["email"])
+        if username_exists or email_exists:
             raise DetailNotAllowedException()
-        if email:
-            raise DetailNotAllowedException()
+
         user_info["password"] = get_password_hash(user_info["password"])
         user_info["apiKey"] = secrets.token_hex(20)
         user_info["last_login"] = datetime.utcnow()
         user_info["creation_date"] = datetime.utcnow()
-        new_user = await db["users"].insert_one(user_info)
-        created_user = await db["users"].find_one({"_id": new_user.inserted_id})
-        token = create_access_token({"id": created_user["_id"]})
+        user = await User.create(**user_info)
+
+        token = create_access_token({"id": user.id})
         verify_link = f"http://localhost:8000/users/verification/?token={token}"
         await send_verification_mail("THYNK Verification", user_info["email"],
                                      {
@@ -49,9 +50,10 @@ async def registration(user_info: UserCreate):
                                          "verify_link": verify_link
                                      }
                                      )
-        return created_user
+        return UserResponse.from_orm(user)
     except Exception as e:
         raise ServerErrorException(str(e))
+
 
 
 @router.get("/verification/", response_description="Verify E-mail")
@@ -60,20 +62,17 @@ async def verification(token: str):
         user = await get_current_user(token)
         if not user:
             raise VerificationKeyNotFoundException()
-        elif user["is_verified"]:
+        elif user.is_verified:
             raise UserVerifiedException()
         else:
-            await db["users"].update_one(
-                {"_id": user["_id"]},
-                {"$set": {"is_verified": True}}
-            )
-            await send_registration_mail("Registration successful", user["email"],
+            await User.filter(id=user.id).update(is_verified=True)
+            await send_registration_mail("Registration successful", user.email,
                                          {
                                              "title": "Registration successful",
-                                             "name": user["name"]
+                                             "name": user.name
                                          }
                                          )
-            return {"user": user["email"], "message": "User verification successful"}
+            return {"user": user.email, "message": "User verification successful"}
     except Exception as e:
         raise ServerErrorException(str(e))
 
@@ -83,22 +82,22 @@ async def resend_verification(user_id: str):
     if user_id == 0:
         raise HTTPException(status_code=400, detail="Invalid user id")
     try:
-        user = await db["users"].find_one({"_id": user_id})
+        user = await User.get_or_none(id=user_id)
         if not user:
             raise VerificationKeyNotFoundException()
-        elif user["is_verified"]:
+        elif user.is_verified:
             raise UserVerifiedException()
         else:
-            token = create_access_token({"id": user["_id"]})
+            token = create_access_token({"id": user.id})
             verify_link = f"http://localhost:8000/users/verification/?token={token}"
-            await send_verification_mail("THYNK Verification", user["email"],
+            await send_verification_mail("THYNK Verification", user.email,
                                          {
                                              "title": "E-mail Verification",
-                                             "name": user["name"],
+                                             "name": user.name,
                                              "verify_link": verify_link
                                          }
                                          )
-            return {"user": user["email"], "message": "User verification resent successfully"}
+            return {"user": user.email, "message": "User verification resent successfully"}
     except Exception as e:
         raise ServerErrorException(str(e))
 
@@ -106,30 +105,26 @@ async def resend_verification(user_id: str):
 @router.post("/details", response_description="Get user details", response_model=UserResponse)
 async def details(current_user=Depends(get_current_user)):
     try:
-        user = await db["users"].find_one({"_id": current_user["_id"]})
+        user = await User.get(id=current_user.id)
         return user
     except Exception as e:
         raise ServerErrorException(str(e))
 
 
 @router.put("/update", response_description="Update user details", response_model=UserResponse)
-async def update_details(user_update: User, current_user=Depends(get_current_user)):
+async def update_user(user_update: UserUpdate_Pydantic, user: User_Pydantic = Depends(get_current_user)):
     try:
-        user_id = current_user["_id"]
-        user_info = jsonable_encoder(user_update)
-        user = await db["users"].find_one({"_id": user_id})
-        if user is None:
-            raise UserNotFoundException("User not found")
-        updated_user = await db["users"].update_one(
-            {"_id": user_id},
-            {"$set": user_info}
-        )
-        if updated_user.modified_count == 1:
-            updated_user = await db["users"].find_one({"_id": user_id})
-            updated_user["last_login"] = datetime.utcnow()
-            return updated_user
-        else:
-            raise UserUpdateException("Could not update user details")
+        user.name = user_update.name or user.name
+        user.username = user_update.username or user.username
+        user.email = user_update.email or user.email
+
+        # Save the changes to the database
+        await user.save()
+
+        # Convert the updated user object to a UserResponse Pydantic model
+        user_response = await UserResponse.from_tortoise_orm(user)
+
+        return user_response
     except Exception as e:
         raise ServerErrorException(str(e))
 
@@ -139,15 +134,13 @@ async def delete_user(user_id: str, current_user=Depends(get_current_user)):
     if user_id == 0:
         raise InvalidIdException("Invalid user id")
     try:
-        user = await db["users"].find_one({"_id": user_id})
+        user = await User.get(id=user_id)
         if user is None:
             raise UnauthorizedUserException("User not found")
         # Delete user's associated todos
-        await db["todos"].delete_many({"author_id": user_id})
-        # Delete user's associated blogs
-        await db["blogs"].delete_many({"author_id": user_id})
+        await Todo.filter(author_id=user_id).delete()
         # Delete user
-        await db["users"].delete_one({"_id": user_id})
+        await user.delete()
         static_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
                                      'static')
         folder_path = os.path.join(static_folder, f"users/{user_id}")
@@ -161,7 +154,7 @@ async def delete_user(user_id: str, current_user=Depends(get_current_user)):
 @router.post("/images/profile")
 async def upload_profile_picture(file: UploadFile = File(...), current_user=Depends(get_current_user)):
     try:
-        user_id = current_user["_id"]
+        user_id = await User.get(id=current_user.id)
         filepath = f"./../static/users/{user_id}/"
         if not os.path.exists(filepath):
             os.makedirs(filepath)
@@ -178,9 +171,10 @@ async def upload_profile_picture(file: UploadFile = File(...), current_user=Depe
         img = img.resize(size=(200, 200))
         img.save(generated_name)
         file.close()
-        user = await db["users"].find_one({"_id": current_user["_id"]})
+        user = await User.get(id=current_user.id)
         if user:
-            user["profile_picture"] = token_name
+            user.profile_picture = token_name
+            await user.save()
         else:
             raise UnauthorizedUserException()
         file_url = "localhost:8000" + generated_name[1:]
@@ -191,19 +185,19 @@ async def upload_profile_picture(file: UploadFile = File(...), current_user=Depe
 
 @router.post("/request/", response_description="Password Reset request")
 async def reset_request(user_email: PasswordResetRequest):
-    user = await db["users"].find_one({"email": user_email.email})
-    if user is not None:
-        token = create_access_token({"id": user["_id"]})
+    try:
+        user = await User.get(email=user_email.email)
+        token = create_access_token({"id": user.id})
         reset_link = f"http://localhost:8000/password/reset?token={token}"
-        await password_reset("Password Reset", user["email"],
+        await password_reset("Password Reset", user.email,
                              {
                                  "title": "Password Reset",
-                                 "name": user["name"],
+                                 "name": user.name,
                                  "reset_link": reset_link
                              }
                              )
         return {"msg": "Email has been sent with instructions to reset your password."}
-    else:
+    except:
         raise UserNotFoundException("Your details not found, invalid email address")
 
 
@@ -214,12 +208,11 @@ async def reset_password(token: str, new_password: PasswordReset):
         reset_data["password"] = get_password_hash(reset_data["password"])
         if len(reset_data) >= 1:
             user = await get_current_user(token)
-            updating_user = await db["users"].update_one({"_id": user["_id"]}, {"$set": reset_data})
-            if updating_user.modified_count == 1:
-                updated_user = await db["users"].find_one({"_id": user["_id"]})
-                if updated_user is not None:
-                    return updated_user
-        existing_user = await db["users"].find_one({"_id": user["_id"]})
+            await User.filter(id=user.id).update(password=reset_data["password"])
+            updated_user = await User.get(id=user.id)
+            if updated_user is not None:
+                return updated_user
+        existing_user = await User.get(id=user.id)
         if existing_user is not None:
             return existing_user
         raise UserNotFoundException("User not found")

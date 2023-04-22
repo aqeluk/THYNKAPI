@@ -42,7 +42,7 @@ async def add_user_business(business_info: user_business_pydanticIn,
 @router.get('/all')
 async def get_user_businesses(current_user=Depends(get_current_user)):
     try:
-        response = await user_business_pydantic.from_queryset(UserBusiness.filter(owner=current_user["_id"]))
+        response = await user_business_pydantic.from_queryset(UserBusiness.filter(owner=current_user.id))
         return {"status": "ok", "data": response}
     except DoesNotExist as dne:
         BusinessNotFoundException(str(dne))
@@ -89,7 +89,7 @@ async def delete_user_business(business_id: int, current_user=Depends(get_curren
     if business_id == 0:
         raise InvalidIdException("Invalid business id")
     business = await UserBusiness.get(id=business_id)
-    if current_user["username"] not in ["root", "master"] or current_user["_id"] != business.owner:
+    if current_user["username"] not in ["root", "master"] or current_user.id != business.owner:
         raise HTTPException(status_code=403, detail="User not authorized")
     try:
         try:
@@ -213,7 +213,7 @@ async def create_upload_file(product_id: int, file: UploadFile = File(...),
         file.close()
         product = await UserProduct.get(id=product_id)
         business = await product.business
-        if business.owner == user["_id"]:
+        if business.owner == user.id:
             product.product_image = token_name
             await product.save()
         else:

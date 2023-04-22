@@ -9,3 +9,7 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     id: Optional[str] = None
+
+class OAuth2User(BaseModel):
+    email: str
+    name: str

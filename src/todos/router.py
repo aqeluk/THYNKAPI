@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends
 from tortoise.contrib.fastapi import HTTPNotFoundError
 from typing import List
-from src.todos.schemas import Todo, TodoResponse
-from src.todos.schemas import TodoModel
+from src.todos.schemas import Todo, TodoResponse, TodoModel
 from src.user.services import get_current_user
 from src.exceptions import ServerErrorException, UnauthorizedUserException
 from src.todos.exceptions import TodoNotFoundException
@@ -18,22 +17,24 @@ router = APIRouter(
 async def create_todo(todo_info: Todo, current_user=Depends(get_current_user)):
     try:
         todo_info_dict = todo_info.dict(exclude_unset=True)
-        todo_info_dict["author_name"] = current_user.name
-        todo_info_dict["author_id"] = current_user.id
         todo_info_dict["created_at"] = datetime.utcnow()
         todo_info_dict["last_modified"] = datetime.utcnow()
 
-        todo = await TodoModel.create(**todo_info_dict)
+        todo = await TodoModel.create(**todo_info_dict, author=current_user)
         return await TodoResponse.from_tortoise_orm(todo)
     except Exception as e:
         raise ServerErrorException(str(e))
 
 
+
+
+
 @router.get("/", response_description="Get All Todos", response_model=List[TodoResponse])
-async def get_todos(limit: int = 4, orderby: str = "deadline"):
+async def get_todos(limit: int = 4, orderby: str = "deadline",  current_user=Depends(get_current_user)):
     try:
-        todos = await TodoModel.all().order_by(orderby).limit(limit).prefetch_related("author_id")
-        return [await TodoResponse.from_tortoise_orm(todo) for todo in todos]
+        todos = await TodoModel.all().order_by(orderby).limit(limit).prefetch_related("author")
+        response = [await TodoResponse.from_tortoise_orm(todo) for todo in todos if todo.author == current_user]
+        return response
     except Exception as e:
         raise ServerErrorException(str(e))
 

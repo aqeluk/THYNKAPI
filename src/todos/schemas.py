@@ -1,19 +1,19 @@
 from datetime import datetime
-from tortoise.fields import CharField, DatetimeField, IntField
+from tortoise import fields
 from tortoise.validators import MinLengthValidator, MaxLengthValidator
 from tortoise.contrib.pydantic import pydantic_model_creator
 from tortoise.models import Model
+from src.user.schemas import User
 from pydantic import BaseModel
 
 class TodoModel(Model):
-    id = IntField(pk=True)
-    title = CharField(max_length=50, validators=[MinLengthValidator(1), MaxLengthValidator(50)])
-    task = CharField(max_length=500, validators=[MinLengthValidator(1), MaxLengthValidator(500)])
-    deadline = DatetimeField()
-    author_name = CharField(max_length=50, validators=[MinLengthValidator(1), MaxLengthValidator(50)])
-    author_id = CharField(max_length=50, validators=[MinLengthValidator(1), MaxLengthValidator(50)])
-    created_at = DatetimeField(auto_now_add=True)
-    last_modified = DatetimeField(auto_now=True)
+    id = fields.IntField(pk=True)
+    title = fields.CharField(max_length=50, validators=[MinLengthValidator(1), MaxLengthValidator(50)])
+    task = fields.CharField(max_length=500, validators=[MinLengthValidator(1), MaxLengthValidator(500)])
+    deadline = fields.DatetimeField()
+    created_at = fields.DatetimeField(auto_now_add=True)
+    last_modified = fields.DatetimeField(auto_now=True)
+    author = fields.ForeignKeyField("models.User", related_name="user_todos", on_delete=fields.CASCADE)
 
     class Meta:
         table_description = "todos"

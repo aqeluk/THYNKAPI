@@ -12,6 +12,7 @@ class WholesaleBusiness(Business):
     phone = fields.CharField(max_length=15, null=False, validators=[MinLengthValidator(8), MaxLengthValidator(20)])
     address = fields.CharField(max_length=100, null=False, validators=[MinLengthValidator(10), MaxLengthValidator(100)])
     category = fields.CharField(max_length=100, null=False, validators=[MinLengthValidator(3), MaxLengthValidator(100)])
+    owner = fields.ForeignKeyField("models.User", related_name="user_suppliers", on_delete=fields.CASCADE)
 
     class Meta:
         table_description = "wholesale_business"

@@ -21,15 +21,15 @@ router = APIRouter(
 
 
 @router.post('/add')
-async def add_wholesaler(wholesale_info: wholesale_business_pydanticIn, current_user=Depends(get_current_user)):
-    if current_user["username"] not in ["root", "master"]:
+async def add_wholesaler(wholesale_info: wholesale_business_pydanticIn, current_user: User_Pydantic = Depends(get_current_user)):
+    if current_user.username not in ["root", "master"]:
         raise UnauthorizedUserException()
     try:
         wholesale_info_dict = wholesale_info.dict(exclude_unset=True)
         wholesale_info_dict['creation_date'] = datetime.utcnow()
         wholesale_info_dict['last_updated'] = datetime.utcnow()
         wholesale_obj = await WholesaleBusiness.create(**wholesale_info_dict)
-        response = await wholesale_business_pydanticIn.from_tortoise_orm(wholesale_obj)
+        response = await wholesale_business_pydantic.from_tortoise_orm(wholesale_obj)
         return {"status": "ok", "data": response}
     except Exception as e:
         raise ServerErrorException(str(e))

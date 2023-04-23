@@ -2,13 +2,14 @@ from tortoise import fields
 from tortoise.validators import MinLengthValidator
 from tortoise.contrib.pydantic import pydantic_model_creator
 from src.models import Business, Product
+from src.user.schemas import User
 
 
 class UserBusiness(Business):
     business_description = fields.TextField(null=False, validators=[MinLengthValidator(1)])
     company_number = fields.CharField(max_length=30, null=False, validators=[MinLengthValidator(1)])
     vat_number = fields.CharField(max_length=30, null=False, validators=[MinLengthValidator(1)])
-    owner = fields.CharField(max_length=30, null=False, validators=[MinLengthValidator(1)])
+    owner = fields.ForeignKeyField("models.User", related_name="user_businesses", on_delete=fields.CASCADE)
 
 
 class UserProduct(Product):

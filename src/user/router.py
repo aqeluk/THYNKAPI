@@ -110,45 +110,49 @@ async def details(current_user=Depends(get_current_user)):
     except Exception as e:
         raise ServerErrorException(str(e))
 
-
 @router.put("/update", response_description="Update user details", response_model=UserResponse)
 async def update_user(user_update: UserUpdate_Pydantic, user: User_Pydantic = Depends(get_current_user)):
     try:
-        user.name = user_update.name or user.name
-        user.username = user_update.username or user.username
-        user.email = user_update.email or user.email
+        user_obj = await User.get(id=user.id)
+        user_obj.name = user_update.name or user_obj.name
+        user_obj.username = user_update.username or user_obj.username
+        user_obj.email = user_update.email or user_obj.email
 
         # Save the changes to the database
-        await user.save()
+        await user_obj.save()
 
         # Convert the updated user object to a UserResponse Pydantic model
-        user_response = await UserResponse.from_tortoise_orm(user)
+        user_response = UserResponse.from_orm(user_obj)
 
         return user_response
     except Exception as e:
         raise ServerErrorException(str(e))
 
-
-@router.delete("/delete/{user_id}", response_description="Delete a User")
-async def delete_user(user_id: str, current_user=Depends(get_current_user)):
-    if user_id == 0:
-        raise InvalidIdException("Invalid user id")
+@router.delete("/delete/{username}", response_description="Delete a User")
+async def delete_user(username: str, current_user: User_Pydantic = Depends(get_current_user)):
+    if current_user.username not in ['root', 'master']:
+        raise UnauthorizedUserException("Only root or master can delete users")
+    
     try:
-        user = await User.get(id=user_id)
+        user = await User.get(username=username)
         if user is None:
             raise UnauthorizedUserException("User not found")
+        
         # Delete user's associated todos
-        await Todo.filter(author_id=user_id).delete()
+        await Todo.filter(author_id=user.id).delete()
+        
         # Delete user
         await user.delete()
         static_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
                                      'static')
-        folder_path = os.path.join(static_folder, f"users/{user_id}")
+        folder_path = os.path.join(static_folder, f"users/{user.id}")
         if os.path.exists(folder_path):
             shutil.rmtree(folder_path)
+        
         return {"message": "User deleted successfully"}
     except Exception as e:
         raise ServerErrorException(str(e))
+
 
 
 @router.post("/images/profile")

@@ -13,8 +13,9 @@ from src.driver.config import sa_settings
 BROWSER_OPTIONS = Options()
 BROWSER_OPTIONS.binary_location = sa_settings.google_chrome_bin
 BROWSER_OPTIONS.add_argument("--headless")
-BROWSER_OPTIONS.add_argument("--disable-dev-shm-usage")
 BROWSER_OPTIONS.add_argument("--no-sandbox")
+BROWSER_OPTIONS.add_argument("--disable-dev-shm-usage")
+BROWSER_OPTIONS.add_argument("--disable-gpu")
 DRIVER_PATH = sa_settings.chromedriver_path
 THYNKBROWSER: Optional[WebDriver] = None
 wait = WebDriverWait(THYNKBROWSER, 1)

@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from src.driver.config import sa_settings
 
-BROWSER_OPTIONS = webdriver.ChromeOptions()
+BROWSER_OPTIONS = Options()
 BROWSER_OPTIONS.binary_location = sa_settings.google_chrome_bin
 BROWSER_OPTIONS.add_argument("--headless")
 BROWSER_OPTIONS.add_argument("--disable-dev-shm-usage")
@@ -57,19 +57,13 @@ async def login_to_selleramp():
     try:
         if not THYNKBROWSER:
             await launch_browser()
-        # Create a new tab
         await new_tab()
-        # Check if already on the login page
         if THYNKBROWSER.current_url != "https://sas.selleramp.com/site/login":
-            # Navigate to the login page
             await go_to_url("https://sas.selleramp.com/site/login")
-        # Find the email field and enter the email
         email = THYNKBROWSER.find_element(By.XPATH, "//*[@id='loginform-email']")
         email.send_keys(sa_settings.sas_email)
-        # Find the password field and enter the password
         password = THYNKBROWSER.find_element(By.XPATH, "//*[@id='loginform-password']")
         password.send_keys(sa_settings.sas_pass)
-        # Click the login button
         login = THYNKBROWSER.find_element(By.XPATH, "//*[@id='login-form']/div[5]/button")
         login.click()
     except Exception as e:
@@ -79,16 +73,12 @@ async def login_to_selleramp():
 
 async def search_ean_on_selleramp(ean: str):
     try:
-        # Check if the current URL matches the selleramp search URL
         if "https://sas.selleramp.com/" not in THYNKBROWSER.current_url:
-            # Navigate to the login page
             url = "https://sas.selleramp.com/"
             await go_to_url(url)
-        # Find the search field and enter the EAN
         search_field = THYNKBROWSER.find_element(By.XPATH, "//*[@id='saslookup-search_term']")
         search_field.clear()
         search_field.send_keys(ean)
-        # Click the search button
         try:
             search_button = THYNKBROWSER.find_element(By.XPATH,
                                                  "/html/body/div[2]/div/div/div[2]/form/div/div/div/div/div/div[2]/button")

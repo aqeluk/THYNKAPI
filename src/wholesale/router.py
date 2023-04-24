@@ -2,7 +2,7 @@ import os
 import secrets
 import shutil
 from PIL import Image
-from fastapi import APIRouter, UploadFile, File, Depends
+from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 from tortoise.exceptions import DoesNotExist
 from src.wholesale.schemas import wholesale_business_pydantic, wholesale_business_pydanticIn, wholesale_product_pydantic,\
     wholesale_product_pydanticIn, wholesale_scraped_product_pydantic, wholesale_scraped_product_pydanticIn,\
@@ -10,6 +10,7 @@ from src.wholesale.schemas import wholesale_business_pydantic, wholesale_busines
 from datetime import datetime
 from fastapi import HTTPException
 from src.user.services import get_current_user
+from src.user.schemas import User_Pydantic
 from src.exceptions import ServerErrorException, UnauthorizedUserException, ProductNotFoundException, InvalidIdException
 from src.wholesale.exceptions import WholesaleNotFoundException
 
@@ -20,12 +21,12 @@ router = APIRouter(
     )
 
 
+
 @router.post('/add')
 async def add_wholesaler(wholesale_info: wholesale_business_pydanticIn, current_user: User_Pydantic = Depends(get_current_user)):
-    if current_user.username not in ["root", "master"]:
-        raise UnauthorizedUserException()
     try:
         wholesale_info_dict = wholesale_info.dict(exclude_unset=True)
+        wholesale_info_dict['owner'] = current_user
         wholesale_info_dict['creation_date'] = datetime.utcnow()
         wholesale_info_dict['last_updated'] = datetime.utcnow()
         wholesale_obj = await WholesaleBusiness.create(**wholesale_info_dict)
@@ -36,19 +37,23 @@ async def add_wholesaler(wholesale_info: wholesale_business_pydanticIn, current_
 
 
 @router.get('/all')
-async def get_all_wholesalers():
+async def get_all_wholesalers(current_user: User_Pydantic = Depends(get_current_user)):
     try:
-        response = await wholesale_business_pydantic.from_queryset(WholesaleBusiness.all())
+        response = await wholesale_business_pydantic.from_queryset(WholesaleBusiness.filter(owner=current_user))
         return {"status": "ok", "data": response}
     except Exception as e:
         WholesaleNotFoundException(str(e))
 
 
 @router.get('/get/{wholesale_id}')
-async def get_specific_wholesale(wholesale_id: int):
+async def get_specific_wholesale(wholesale_id: int, current_user: User_Pydantic = Depends(get_current_user)):
     if wholesale_id == 0:
         raise HTTPException(status_code=400, detail="Invalid wholesale id")
     try:
+        wholesale = await WholesaleBusiness.get(id=wholesale_id)
+        owner = await wholesale.owner
+        if owner != current_user:
+            raise UnauthorizedUserException("User not authorized")
         response = await wholesale_business_pydantic.from_queryset_single(WholesaleBusiness.get(id=wholesale_id))
         return {"status": "ok", "data": response}
     except DoesNotExist as dne:
@@ -60,12 +65,13 @@ async def get_specific_wholesale(wholesale_id: int):
 @router.put('/update/{wholesale_id}')
 async def update_wholesale(wholesale_id: int, update_info: wholesale_business_pydanticIn,
                            current_user=Depends(get_current_user)):
-    if current_user["username"] not in ["root", "master"]:
-        raise HTTPException(status_code=403, detail="User not authorized")
     if wholesale_id == 0:
         raise HTTPException(status_code=400, detail="Invalid wholesale id")
     try:
         wholesale = await WholesaleBusiness.get(id=wholesale_id)
+        owner = await wholesale.owner
+        if owner != current_user:
+            raise UnauthorizedUserException("User not authorized")
         update_info = update_info.dict(exclude_unset=True)
         wholesale.business_name = update_info['business_name']
         wholesale.logo = update_info['logo']
@@ -87,12 +93,13 @@ async def update_wholesale(wholesale_id: int, update_info: wholesale_business_py
 
 @router.delete('/delete/{wholesale_id}')
 async def delete_wholesale(wholesale_id: int, current_user=Depends(get_current_user)):
-    if current_user["username"] not in ["root", "master"]:
-        raise HTTPException(status_code=403, detail="User not authorized")
     if wholesale_id == 0:
         raise HTTPException(status_code=400, detail="Invalid wholesale id")
     try:
         wholesaler = await WholesaleBusiness.get(id=wholesale_id)
+        owner = await wholesaler.owner
+        if owner != current_user:
+            raise UnauthorizedUserException("User not authorized")
         try:
             wholesale_products = await WholesaleProduct.filter(business=wholesaler).all()
             scraped_wholesale_products = await WholesaleScrapedProduct.filter(business=wholesaler).all()
@@ -120,11 +127,12 @@ async def delete_wholesale(wholesale_id: int, current_user=Depends(get_current_u
 
 
 @router.post('/product/add/{wholesale_id}')
-async def add_wholesale_product(wholesale_id: int, product_details: wholesale_product_pydanticIn):
-    if wholesale_id == 0:
-        raise HTTPException(status_code=400, detail="Invalid wholesale id")
+async def add_wholesale_product(wholesale_id: int, product_details: wholesale_product_pydanticIn, current_user: User_Pydantic = Depends(get_current_user)):
     try:
-        wholesale = await WholesaleBusiness.get(id=wholesale_id)
+        wholesale = await WholesaleBusiness.get(id=wholesale_id, owner_id=current_user.id)
+        owner = await wholesale.owner
+        if owner != current_user:
+            raise UnauthorizedUserException("User not authorized")
         product_details_dict = product_details.dict(exclude_unset=True)
         product_details_dict['creation_date'] = datetime.utcnow()
         product_details_dict['last_updated'] = datetime.utcnow()
@@ -138,11 +146,14 @@ async def add_wholesale_product(wholesale_id: int, product_details: wholesale_pr
 
 
 @router.get('/product/get/{wholesale_id}/products')
-async def get_all_wholesaler_products(wholesale_id: int):
+async def get_all_wholesaler_products(wholesale_id: int, current_user: User_Pydantic = Depends(get_current_user)):
     if wholesale_id == 0:
         raise HTTPException(status_code=400, detail="Invalid product id")
     try:
         wholesaler = await WholesaleBusiness.get(id=wholesale_id)
+        owner = await wholesaler.owner
+        if owner != current_user:
+            raise UnauthorizedUserException("User not authorized")
         response = await wholesale_product_pydantic.from_queryset(WholesaleProduct.filter(business=wholesaler))
         return {"status": "ok", "data": response}
     except DoesNotExist as dne:
@@ -152,10 +163,15 @@ async def get_all_wholesaler_products(wholesale_id: int):
 
 
 @router.get('/product/get/{product_id}')
-async def get_specific_wholesale_product(product_id: int):
+async def get_specific_wholesale_product(product_id: int, current_user: User_Pydantic = Depends(get_current_user)):
     if product_id == 0:
         raise HTTPException(status_code=400, detail="Invalid product id")
     try:
+        product = await WholesaleProduct.get(id=product_id)
+        wholesale = await product.business
+        owner = await  wholesale.owner
+        if owner != current_user:
+            raise UnauthorizedUserException("User not authorized")
         response = await wholesale_product_pydantic.from_queryset_single(WholesaleProduct.get(id=product_id))
         return {"status": "ok", "data": response}
     except DoesNotExist as dne:
@@ -165,11 +181,15 @@ async def get_specific_wholesale_product(product_id: int):
 
 
 @router.put('/product/update/{product_id}')
-async def update_wholesale_product(product_id: int, update_info: wholesale_product_pydanticIn):
+async def update_wholesale_product(product_id: int, update_info: wholesale_product_pydanticIn, current_user: User_Pydantic = Depends(get_current_user)):
     if product_id == 0:
         raise HTTPException(status_code=400, detail="Invalid product id")
     try:
         product = await WholesaleProduct.get(id=product_id)
+        wholesale = await product.business
+        owner = await  wholesale.owner
+        if owner != current_user:
+            raise UnauthorizedUserException("User not authorized")
         update_info = update_info.dict(exclude_unset=True)
         product.name = update_info['name']
         product.category = update_info['category']
@@ -186,11 +206,15 @@ async def update_wholesale_product(product_id: int, update_info: wholesale_produ
 
 
 @router.delete('/product/delete/{wholesale_id}/{product_id}')
-async def delete_wholesale_product(wholesale_id: int, product_id: int):
+async def delete_wholesale_product(wholesale_id: int, product_id: int, current_user: User_Pydantic = Depends(get_current_user)):
     if product_id == 0:
         raise HTTPException(status_code=400, detail="Invalid product id")
     try:
         product = await WholesaleProduct.get(id=product_id)
+        wholesale = await product.business
+        owner = await  wholesale.owner
+        if owner != current_user:
+            raise UnauthorizedUserException("User not authorized")
         await product.delete()
         static_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
                                      'static')
@@ -205,7 +229,7 @@ async def delete_wholesale_product(wholesale_id: int, product_id: int):
 
 
 @router.post("/product/images/{wholesale_id}/{product_id}")
-async def create_upload_file(wholesale_id: int, product_id: int, file: UploadFile = File(...)):
+async def create_upload_file(wholesale_id: int, product_id: int, file: UploadFile = File(...), current_user: User_Pydantic = Depends(get_current_user)):
     if wholesale_id == 0 or product_id == 0:
         raise HTTPException(status_code=400, detail="Invalid ID combination provided")
     try:
@@ -228,12 +252,12 @@ async def create_upload_file(wholesale_id: int, product_id: int, file: UploadFil
         img.save(generated_name)
         file.close()
         product = await WholesaleProduct.get(id=product_id)
-        business = await product.business
-        if business:
-            product.product_image = token_name
-            await product.save()
-        else:
-            raise UnauthorizedUserException()
+        wholesale = await product.business
+        owner = await wholesale.owner
+        if owner != current_user:
+            raise UnauthorizedUserException("User not authorized")
+        product.product_image = token_name
+        await product.save()
         file_url = "localhost:8000" + generated_name[1:]
         return {"status": "ok", "filename": file_url}
     except Exception as e:
@@ -242,12 +266,15 @@ async def create_upload_file(wholesale_id: int, product_id: int, file: UploadFil
 
 @router.post('/product/scraped/add/{wholesale_id}/{product_id}')
 async def add_scraped_wholesale_product(wholesale_id: int, product_id: int,
-                                        product_details: wholesale_scraped_product_pydanticIn):
+                                        product_details: wholesale_scraped_product_pydanticIn, current_user: User_Pydantic = Depends(get_current_user)):
     if wholesale_id == 0 or product_id == 0:
         raise HTTPException(status_code=400, detail="Invalid ID combination provided")
     try:
         product = await WholesaleProduct.get(id=product_id)
         wholesale = await WholesaleBusiness.get(id=wholesale_id)
+        owner = await  wholesale.owner
+        if owner != current_user:
+            raise UnauthorizedUserException("User not authorized")
         product_details_dict = product_details.dict(exclude_unset=True)
         product_details_dict['price'] = product.price
         product_details_dict['creation_date'] = datetime.utcnow()
@@ -262,11 +289,14 @@ async def add_scraped_wholesale_product(wholesale_id: int, product_id: int,
 
 
 @router.get('/product/scraped/get/{wholesale_id}/products')
-async def get_all_scraped_wholesaler_products(wholesale_id: int):
+async def get_all_scraped_wholesaler_products(wholesale_id: int, current_user: User_Pydantic = Depends(get_current_user)):
     if wholesale_id == 0:
         raise InvalidIdException("Invalid product id")
     try:
         wholesaler = await WholesaleBusiness.get(id=wholesale_id)
+        owner = await  wholesaler.owner
+        if owner != current_user:
+            raise UnauthorizedUserException("User not authorized")
         response = await wholesale_scraped_product_pydantic.from_queryset(WholesaleScrapedProduct.filter(business=
                                                                                                          wholesaler))
         return {"status": "ok", "data": response}
@@ -277,10 +307,15 @@ async def get_all_scraped_wholesaler_products(wholesale_id: int):
 
 
 @router.get('/product/scraped/get/{product_id}')
-async def get_specific_scraped_wholesale_product(product_id: int):
+async def get_specific_scraped_wholesale_product(product_id: int, current_user: User_Pydantic = Depends(get_current_user)):
     if product_id == 0:
         raise HTTPException(status_code=400, detail="Invalid product id")
     try:
+        product = await WholesaleScrapedProduct.get(id=product_id)
+        wholesale = await product.business
+        owner = await wholesale.owner
+        if owner != current_user:
+            raise UnauthorizedUserException("User not authorized")
         response = await wholesale_scraped_product_pydantic.from_queryset_single(WholesaleScrapedProduct.get(
             id=product_id))
         return {"status": "ok", "data": response}
@@ -291,11 +326,15 @@ async def get_specific_scraped_wholesale_product(product_id: int):
 
 
 @router.put('/product/scraped/update/{product_id}')
-async def update_scraped_wholesale_product(product_id: int, update_info: wholesale_scraped_product_pydanticIn):
+async def update_scraped_wholesale_product(product_id: int, update_info: wholesale_scraped_product_pydanticIn, current_user: User_Pydantic = Depends(get_current_user)):
     if product_id == 0:
         raise HTTPException(status_code=400, detail="Invalid product id")
     try:
         product = await WholesaleScrapedProduct.get(id=product_id)
+        wholesale = await product.business
+        owner = await  wholesale.owner
+        if owner != current_user:
+            raise UnauthorizedUserException("User not authorized")
         update_info = update_info.dict(exclude_unset=True)
         product.asin = update_info['asin']
         product.ean = update_info['ean']
@@ -319,12 +358,16 @@ async def update_scraped_wholesale_product(product_id: int, update_info: wholesa
 
 
 @router.delete('/product/scraped/delete/{wholesale_id}/{product_id}')
-async def delete_scraped_wholesale_product(wholesale_id: int, product_id: int):
+async def delete_scraped_wholesale_product(wholesale_id: int, product_id: int, current_user: User_Pydantic = Depends(get_current_user)):
     if product_id == 0:
         raise HTTPException(status_code=400, detail="Invalid product id")
     try:
-        await WholesaleScrapedProduct.filter(id=product_id).delete()
-        # Delete any files in the associated folder
+        product = await WholesaleScrapedProduct.get(id=product_id)
+        wholesale = await product.business
+        owner = await  wholesale.owner
+        if owner != current_user:
+            raise UnauthorizedUserException("User not authorized")
+        await product.delete()
         static_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
                                      'static')
         folder_path = os.path.join(static_folder, f"wholesale_scraped/{wholesale_id}/{product_id}")
@@ -338,7 +381,7 @@ async def delete_scraped_wholesale_product(wholesale_id: int, product_id: int):
 
 
 @router.post("/product/scraped/{wholesale_id}/{product_id}")
-async def create_scraped_upload_file(wholesale_id: int, product_id: int, file: UploadFile = File(...)):
+async def create_scraped_upload_file(wholesale_id: int, product_id: int, file: UploadFile = File(...), current_user: User_Pydantic = Depends(get_current_user)):
     if wholesale_id == 0 or product_id == 0:
         raise InvalidIdException("Invalid ID combination provided")
     try:
@@ -361,12 +404,12 @@ async def create_scraped_upload_file(wholesale_id: int, product_id: int, file: U
         img.save(generated_name)
         file.close()
         product = await WholesaleScrapedProduct.get(id=product_id)
-        business = await product.business
-        if business:
-            product.product_image = token_name
-            await product.save()
-        else:
-            raise UnauthorizedUserException()
+        wholesale = await product.business
+        owner = await  wholesale.owner
+        if owner != current_user:
+            raise UnauthorizedUserException("User not authorized")
+        product.product_image = token_name
+        await product.save()
         file_url = "localhost:8000" + generated_name[1:]
         return {"status": "ok", "filename": file_url}
     except Exception as e:

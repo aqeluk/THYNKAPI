@@ -8,7 +8,6 @@ class AppSettings(BaseSettings):
         env_file_encoding = "utf-8"
         env_prefix = "app_"
 
-    mongodb_url: AnyUrl
     postgresql_url: AnyUrl
     mail_username: EmailStr
     mail_password: str

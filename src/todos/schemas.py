@@ -13,10 +13,11 @@ class TodoModel(Model):
     deadline = fields.DatetimeField()
     created_at = fields.DatetimeField(auto_now_add=True)
     last_modified = fields.DatetimeField(auto_now=True)
-    author = fields.ForeignKeyField("models.User", related_name="user_todos", on_delete=fields.CASCADE)
+    author = fields.ForeignKeyField("models.User", related_name="todos")
 
     class Meta:
         table_description = "todos"
 
 Todo = pydantic_model_creator(TodoModel, name="Todo", exclude_readonly=True)
 TodoResponse = pydantic_model_creator(TodoModel, name="TodoResponse")
+

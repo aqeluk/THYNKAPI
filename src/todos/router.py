@@ -3,6 +3,7 @@ from tortoise.contrib.fastapi import HTTPNotFoundError
 from typing import List
 from src.todos.schemas import Todo, TodoResponse, TodoModel
 from src.user.services import get_current_user
+from src.user.schemas import User_Pydantic
 from src.exceptions import ServerErrorException, UnauthorizedUserException
 from src.todos.exceptions import TodoNotFoundException
 from datetime import datetime
@@ -11,7 +12,6 @@ router = APIRouter(
     prefix="/todo",
     tags=["Todos"]
 )
-
 
 @router.post("/", response_description="Create Todo", response_model=TodoResponse)
 async def create_todo(todo_info: Todo, current_user=Depends(get_current_user)):
@@ -25,24 +25,23 @@ async def create_todo(todo_info: Todo, current_user=Depends(get_current_user)):
     except Exception as e:
         raise ServerErrorException(str(e))
 
-
-
-
-
 @router.get("/", response_description="Get All Todos", response_model=List[TodoResponse])
 async def get_todos(limit: int = 4, orderby: str = "deadline",  current_user=Depends(get_current_user)):
     try:
-        todos = await TodoModel.all().order_by(orderby).limit(limit).prefetch_related("author")
-        response = [await TodoResponse.from_tortoise_orm(todo) for todo in todos if todo.author == current_user]
+        todos = await TodoModel.filter(author=current_user).order_by(orderby).limit(limit).prefetch_related("author")
+        response = [await TodoResponse.from_tortoise_orm(todo) for todo in todos]
         return response
     except Exception as e:
         raise ServerErrorException(str(e))
 
 
 @router.get("/{todo_id}", response_description="Get Specific Todo", response_model=TodoResponse)
-async def get_todo(todo_id: int):
+async def get_todo(todo_id: int, current_user: User_Pydantic = Depends(get_current_user)):
     try:
         todo = await TodoModel.get(id=todo_id)
+        author = await todo.author
+        if author != current_user:
+            raise UnauthorizedUserException("User not authorized")
         return await TodoResponse.from_tortoise_orm(todo)
     except TodoModel.DoesNotExist:
         raise TodoNotFoundException(todo_id=todo_id)

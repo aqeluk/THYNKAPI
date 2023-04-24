@@ -5,7 +5,6 @@ from fastapi.encoders import jsonable_encoder
 from tortoise.exceptions import DoesNotExist
 from src.auth.services import create_access_token
 from src.user.services import get_current_user
-from src.database import db
 from src.todos.schemas import Todo
 from src.user.schemas import User, PasswordReset, PasswordResetRequest, UserResponse, UserCreate, UserUpdate_Pydantic, User_Pydantic
 from src.user.utils import get_password_hash
@@ -78,11 +77,9 @@ async def verification(token: str):
 
 
 @router.get("/verification", response_description="Verify E-mail")
-async def resend_verification(user_id: str):
-    if user_id == 0:
-        raise HTTPException(status_code=400, detail="Invalid user id")
+async def resend_verification(claimingUsername: str):
     try:
-        user = await User.get_or_none(id=user_id)
+        user = await User.get_or_none(username=claimingUsername)
         if not user:
             raise VerificationKeyNotFoundException()
         elif user.is_verified:

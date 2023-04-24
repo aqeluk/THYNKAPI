@@ -1,18 +1,21 @@
 import asyncio
 from typing import Optional
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.webdriver import WebDriver
 from fastapi import HTTPException
 from selenium.common import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from src.driver.config import sa_settings
 
-DRIVER_PATH = "geckodriver"
-BROWSER_OPTIONS = Options()
-BROWSER_OPTIONS.headless = True
+BROWSER_OPTIONS = webdriver.ChromeOptions()
+BROWSER_OPTIONS.binary_location = sa_settings.google_chrome_bin
+BROWSER_OPTIONS.add_argument("--headless")
+BROWSER_OPTIONS.add_argument("--disable-dev-shm-usage")
+BROWSER_OPTIONS.add_argument("--no-sandbox")
+DRIVER_PATH = sa_settings.chromedriver_path
 BROWSER: Optional[WebDriver] = None
 wait = WebDriverWait(BROWSER, 1)
 
@@ -20,7 +23,7 @@ wait = WebDriverWait(BROWSER, 1)
 async def launch_browser():
     global BROWSER
     service = Service(executable_path=DRIVER_PATH)
-    BROWSER = webdriver.Firefox(service=service, options=BROWSER_OPTIONS)
+    BROWSER = webdriver.Chrome(service=service, options=BROWSER_OPTIONS)
 
 
 async def new_tab():

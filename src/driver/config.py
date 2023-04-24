@@ -11,6 +11,8 @@ class SASettings(BaseSettings):
 
     sas_email: EmailStr
     sas_pass: str
+    google_chrome_bin: str
+    chromedriver_path:str
 
 
 sa_settings = SASettings()
